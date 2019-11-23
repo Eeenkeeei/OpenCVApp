@@ -8,3 +8,8 @@ body {
     padding: 30px;
     font-family: Arial, sans-serif;
 }
+
+.histogram {
+    height: 150px;
+    width: 300px
+}

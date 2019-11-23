@@ -9,10 +9,10 @@
 <h2>Лабораторная работа №1, Ильичев, 4308</h2>
 <h3 id="status">Библиотека загружается</h3>
 
-<h3>Билатеральный фильтр</h3>
+<h3>Медианное размытие</h3>
 <img id="imageSrc" alt="No Image" style="display: none" src="1.jpg"/>
 <input type="file" id="fileInput" name="file"/>
-<canvas id="canvasOutput_2" class="canvas"></canvas>
+<canvas id="canvasOutput_2" style="display: none" class="canvas"></canvas>
 <canvas id="canvasOutput_2_result"></canvas>
 
 <p>
@@ -22,6 +22,9 @@
     </label>
 
 </p>
+
+<h3>Гистограмма яркости</h3>
+<canvas id="histogram" class="histogram"></canvas>
 
 <script async src="opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
 <script src="tasks.js"></script>
