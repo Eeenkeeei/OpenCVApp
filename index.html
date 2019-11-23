@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>№1, Ильичев, 4308</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<h2>Лабораторная работа №1, Ильичев, 4308</h2>
+<h3 id="status">Библиотека загружается</h3>
+
+<h3>Билатеральный фильтр</h3>
+<img id="imageSrc" alt="No Image" style="display: none" src="1.jpg"/>
+<input type="file" id="fileInput" name="file"/>
+<canvas id="canvasOutput_2" class="canvas"></canvas>
+<canvas id="canvasOutput_2_result"></canvas>
+
+<p>
+    <label>
+        Размытие
+        <input type="range" value="0" max="7" step="0.1" id="blurInputRange"/>
+    </label>
+
+</p>
+
+<script async src="opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+<script src="tasks.js"></script>
+</body>
+</html>
