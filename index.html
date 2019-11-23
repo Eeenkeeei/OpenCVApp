@@ -15,13 +15,35 @@
 <canvas id="canvasOutput_2" style="display: none" class="canvas"></canvas>
 <canvas id="canvasOutput_2_result"></canvas>
 
+<button id="ResetImgButton">Reset img</button>
+
+
+<p>
+    <label>
+        Цветовой тон
+        <input type="range" value="0" min="0" max="360" step="1" id="HueInputRange"/>
+    </label>
+</p>
+<p>
+    <label>
+        Насыщенность
+        <input type="range" value="0" min="0" max="100" step="1" id="ValueInputRange"/>
+    </label>
+</p>
+<p>
+    <label>
+        Яркость
+        <input type="range" value="0" min="0" max="255" step="1" id="BrightnessInputRange"/>
+    </label>
+</p>
 <p>
     <label>
         Размытие
-        <input type="range" value="0" max="7" step="0.1" id="blurInputRange"/>
+        <input type="range" value="0" max="100" step="0.1" id="blurInputRange"/>
     </label>
-
 </p>
+
+
 
 <h3>Гистограмма яркости</h3>
 <canvas id="histogram" class="histogram"></canvas>

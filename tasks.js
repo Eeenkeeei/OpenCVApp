@@ -3,7 +3,15 @@ const onOpenCvReady = () => {
     console.log('Библиотека OpenCV.js загружена')
 };
 
+const resetImgButton = document.getElementById('ResetImgButton');
 const imgElement = document.getElementById('imageSrc');
+
+resetImgButton.addEventListener('click', () => {
+    let mat = cv.imread('canvasOutput_2');
+    cv.imshow('canvasOutput_2_result', mat);
+    renderHistogram()
+    mat.delete()
+});
 
 setTimeout(() => {
     let mat = cv.imread(imgElement);
@@ -18,9 +26,58 @@ setTimeout(() => {
 }, 800);
 
 const BlurInputRangeEl = document.getElementById('blurInputRange');
+const BrightnessInputRangeEl = document.getElementById('BrightnessInputRange');
+const HueInputRangeEl = document.getElementById('HueInputRange');
+const ValueInputRangeEl = document.getElementById('ValueInputRange');
+
+HueInputRangeEl.addEventListener('input', (evt) => {
+    let image = cv.imread('canvasOutput_2_result');
+    cv.cvtColor(image, image, cv.COLOR_RGB2HSV);
+    // cv.cvtColor(image, image, cv.COLOR_RGB2BGR);
+    // cv.cvtColor(image, image, cv.COLOR_BRG2HSV);
+
+    for (let i = 0; i < image.matSize[1]; i++) {
+        for (let j = 0; j < image.matSize[0]; j++) {
+            image.ucharPtr(j, i)[0] = Number(evt.target.value); // 0 канал из HSV
+
+        }
+    }
+    cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
+    cv.imshow('canvasOutput_2_result', image);
+    renderHistogram()
+});
+
+ValueInputRangeEl.addEventListener('input', (evt) => {
+    let image = cv.imread('canvasOutput_2_result');
+    cv.cvtColor(image, image, cv.COLOR_RGB2HSV);
+
+    for (let i = 0; i < image.matSize[1]; i++) {
+        for (let j = 0; j < image.matSize[0]; j++) {
+            image.ucharPtr(j, i)[1] = Number(evt.target.value); // 1 канал из HSV
+
+        }
+    }
+    cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
+    cv.imshow('canvasOutput_2_result', image);
+    renderHistogram()
+});
+
+BrightnessInputRangeEl.addEventListener('input', (evt) => {
+    let image = cv.imread('canvasOutput_2_result');
+    cv.cvtColor(image, image, cv.COLOR_RGB2HSV);
+
+    for (let i = 0; i < image.matSize[1]; i++) {
+        for (let j = 0; j < image.matSize[0]; j++) {
+            image.ucharPtr(j, i)[2] = Number(evt.target.value); // 2 канал из HSV
+        }
+    }
+    cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
+    cv.imshow('canvasOutput_2_result', image);
+    renderHistogram()
+});
 
 BlurInputRangeEl.addEventListener('input', (evt) => {
-    let src = cv.imread('canvasOutput_2');
+    let src = cv.imread('canvasOutput_2_result');
     let dst = new cv.Mat();
 // You can try more different parameters
     cv.medianBlur(src, dst, Number(evt.target.value));
