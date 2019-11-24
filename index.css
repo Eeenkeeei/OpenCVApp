@@ -13,3 +13,7 @@ body {
     height: 150px;
     width: 300px
 }
+
+input:in-range {
+    width: 300px
+}
