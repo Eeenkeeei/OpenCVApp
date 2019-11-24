@@ -23,8 +23,8 @@ class Store {
 
         // // блюр до преобразования
         // let blur = new cv.Mat();
-        // let ksize = new cv.Size(store.blur, store.blur);
-        // cv.GaussianBlur(brightness, blur, ksize, 0, 0, cv.BORDER_DEFAULT);
+        let ksize = new cv.Size(store.blur, store.blur);
+        cv.GaussianBlur(image, image, ksize, 0, 0, cv.BORDER_DEFAULT);
         // cv.imshow('canvasOutput_2_result', blur);
 
         //
@@ -60,14 +60,10 @@ setTimeout(() => {
     let mat = cv.imread(imgElement);
     cv.imshow('canvasOutput_2', mat);
     let src = cv.imread('canvasOutput_2');
-    let dst = new cv.Mat();
-// You can try more different parameters
-    cv.medianBlur(src, dst, 1);
-    cv.imshow('canvasOutput_2_result', dst);
+//     cv.medianBlur(src, dst, 1);
+    cv.imshow('canvasOutput_2_result', src);
     renderHistogram();
-    src.delete();
-    dst.delete();
-}, 800);
+    src.delete()}, 800);
 
 const BlurInputRangeEl = document.getElementById('blurInputRange');
 const BrightnessInputRangeEl = document.getElementById('BrightnessInputRange');
