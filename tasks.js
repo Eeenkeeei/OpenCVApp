@@ -21,14 +21,11 @@ class Store {
         // Смена яркости
         image.convertTo(image, -1, 1, store.brightness);
 
-        // // блюр до преобразования
-        // let blur = new cv.Mat();
+        // блюр до преобразования
         let ksize = new cv.Size(store.blur, store.blur);
-        cv.GaussianBlur(image, image, ksize, 0, 0, cv.BORDER_DEFAULT);
-        // cv.imshow('canvasOutput_2_result', blur);
+        // cv.GaussianBlur(image, image, ksize, 0, 0, cv.BORDER_DEFAULT);
 
-        //
-        // // перевод в HSV пространство
+        // перевод в HSV пространство
         cv.cvtColor(image, image, cv.COLOR_RGB2HSV);
         for (let i = 0; i < image.matSize[1]; i++) {
             for (let j = 0; j < image.matSize[0]; j++) {
@@ -36,7 +33,7 @@ class Store {
                 image.ucharPtr(j, i)[1] = store.value; // 1 канал из HSV
             }
         }
-        // // перевод в RGB пространство
+        // перевод в RGB пространство
         cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
 
         cv.imshow('canvasOutput_2_result', image);
@@ -59,11 +56,27 @@ resetImgButton.addEventListener('click', () => {
 setTimeout(() => {
     let mat = cv.imread(imgElement);
     cv.imshow('canvasOutput_2', mat);
-    let src = cv.imread('canvasOutput_2');
-//     cv.medianBlur(src, dst, 1);
-    cv.imshow('canvasOutput_2_result', src);
+    let image = cv.imread('canvasOutput_2');
+    cv.imshow('canvasOutput_2_result', image);
+    let totalHue = 0;
+    let totalValue = 0;
+    const pixelsOnImage =  image.matSize[1] *  image.matSize[0];
+    // перевод в HSV пространство
+    cv.cvtColor(image, image, cv.COLOR_RGB2HSV);
+    for (let i = 0; i < image.matSize[1]; i++) {
+        for (let j = 0; j < image.matSize[0]; j++) {
+             totalHue+=image.ucharPtr(j, i)[0]; // 0 канал из HSV
+             totalValue+=image.ucharPtr(j, i)[1]; // 1 канал из HSV
+        }
+    }
+    const avgHue = totalHue/pixelsOnImage;
+    const avgValue = totalValue/pixelsOnImage;
+    HueInputRangeEl.value = avgHue;
+    ValueInputRangeEl.value = avgValue
+    // перевод в RGB пространство
+    cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
     renderHistogram();
-    src.delete()}, 800);
+    image.delete()}, 800);
 
 const BlurInputRangeEl = document.getElementById('blurInputRange');
 const BrightnessInputRangeEl = document.getElementById('BrightnessInputRange');
