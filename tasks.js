@@ -3,6 +3,9 @@ const onOpenCvReady = () => {
     console.log('Библиотека OpenCV.js загружена')
 };
 
+const resultCanvas = document.getElementById('canvasOutput_2_result');
+const ctx = resultCanvas.getContext('2d');
+
 class Store {
     store = {
         hue: 0,
@@ -52,6 +55,18 @@ class Store {
 const store = new Store();
 const resetImgButton = document.getElementById('ResetImgButton');
 const imgElement = document.getElementById('imageSrc');
+const saveImgButton = document.getElementById('SaveImgButton');
+
+saveImgButton.addEventListener('click', () => {
+    const dataURL = resultCanvas.toDataURL("image/jpeg");
+    const link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = dataURL;
+    link.download = "image.jpg";
+    link.click();
+    document.body.removeChild(link);
+});
+
 
 resetImgButton.addEventListener('click', () => {
     let mat = cv.imread('canvasOutput_2');
