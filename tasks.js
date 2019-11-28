@@ -91,26 +91,6 @@ setTimeout(() => {
     cv.imshow('canvasOutput_2', mat);
     let image = cv.imread('canvasOutput_2');
     cv.imshow('canvasOutput_2_result', image);
-    let totalHue = 0;
-    let totalValue = 0;
-    let totalBrightness = 0;
-    const pixelsOnImage = image.matSize[1] * image.matSize[0];
-    // перевод в HSV пространство
-    cv.cvtColor(image, image, cv.COLOR_RGB2HSV_FULL);
-    for (let i = 0; i < image.matSize[1]; i++) {
-        for (let j = 0; j < image.matSize[0]; j++) {
-            totalHue += image.ucharPtr(j, i)[0]; // 0 канал из HSV
-            totalValue += image.ucharPtr(j, i)[1]; // 1 канал из HSV
-            totalBrightness += image.ucharPtr(j, i)[1]
-        }
-    }
-    const avgHue = totalHue / pixelsOnImage;
-    const avgValue = totalValue / pixelsOnImage;
-    const avgBrightness = totalBrightness / pixelsOnImage;
-    HueInputRangeEl.value = avgHue;
-    ValueInputRangeEl.value = avgValue;
-    BrightnessInputRangeEl.value = avgBrightness;
-    store.setCurrentImageValues(avgHue, avgValue, 5, 0);
     // перевод в RGB пространство
     cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
     renderHistogram();
