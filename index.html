@@ -4,58 +4,68 @@
     <meta charset="utf-8">
     <title>№1, Ильичев, 4308</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<h3 id="status">Библиотека загружается</h3>
-<img id="imageSrc" alt="No Image" style="display: none" src="1.jpg"/>
-<input type="file" id="fileInput" name="file"/>
-<h3>Гистограмма яркости</h3>
-<canvas id="histogram" class="histogram"></canvas>
-<canvas id="canvasOutput_2" style="display: none" class="canvas"></canvas>
-<canvas id="canvasOutput_2_result"></canvas>
-
-<button id="ResetImgButton">Reset img</button>
-<button id="SaveImgButton">Save img</button>
 
 
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h3 id="status">Библиотека загружается</h3>
+            <img id="imageSrc" alt="No Image" style="display: none" src="1.jpg"/>
+                <input type="file" id="fileInput" name="file" style="display: none">
+            <div class="uploadArea">
+                <button type="button" class="btn btn-info" id="uploadButton">Загрузить изображение</button>
+            </div>
 
+            <canvas id="canvasOutput_2" style="display: none" class="canvas"></canvas>
+            <canvas id="canvasOutput_2_result" class="resultImage"></canvas>
+            <button type="button" id="ResetImgButton" class="btn btn-dark">Сбросить изображение</button>
+            <button type="button" id="SaveImgButton" class="btn btn-dark">Сохранить изображение</button>
+        </div>
+        <div class="col">
+            <p>
+                <label>
+                    Цветовой тон
+                    <input type="range" value="0" min="0" max="360" step="1" id="HueInputRange"/>
+                </label>
+                <span id="HueSpanText"></span>
 
-<p>
-    <label>
-        Цветовой тон
-        <input type="range" value="0" min="0" max="360" step="1" id="HueInputRange"/>
-    </label>
-    <span id="HueSpanText"></span>
-
-</p>
-<p>
-    <label>
-        Насыщенность
-        <input type="range" value="0" min="0" max="100" step="1" id="ValueInputRange"/>
-    </label>
-    <span id="ValueSpanText"></span>
-</p>
-<p>
-    <label>
-        Яркость
-        <input type="range" value="1" min="-100" max="100" step="1" id="BrightnessInputRange"/>
-    </label>
-    <span id="BrightnessSpanText"></span>
-</p>
-<p>
-    <label>
-        Резкость
-        <input type="range" value="0" min="0" max="10" disabled step="0.01" id="ClarityInputRange"/>
-    </label>
-</p>
-<p>
-    <label>
-        Размытие
-        <input type="range" value="0" max="100" step="0.1" disabled id="blurInputRange"/>
-    </label>
-</p>
-
-
+            </p>
+            <p>
+                <label>
+                    Насыщенность
+                    <input type="range" value="0" min="0" max="100" step="1" id="ValueInputRange"/>
+                </label>
+                <span id="ValueSpanText"></span>
+            </p>
+            <p>
+                <label>
+                    Яркость
+                    <input type="range" value="1" min="-100" max="100" step="1" id="BrightnessInputRange"/>
+                </label>
+                <span id="BrightnessSpanText"></span>
+            </p>
+            <p>
+                <label>
+                    Резкость
+                    <input type="range" value="0" min="0" max="10" disabled step="0.01" id="ClarityInputRange"/>
+                </label>
+            </p>
+            <p>
+                <label>
+                    Размытие
+                    <input type="range" value="0" max="100" step="0.1" disabled id="blurInputRange"/>
+                </label>
+            </p>
+            <h3>Гистограмма яркости</h3>
+            <div class="histogramContainer">
+                <canvas id="histogram" class="histogram"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script async src="opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>

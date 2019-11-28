@@ -25,6 +25,7 @@ class Store {
         image.convertTo(image, -1, 1, store.brightness);
 
         // блюр до преобразования
+        //FIXME БЛЮР СТРАННО РАБОТАЕТ
         let ksize = new cv.Size(store.blur, store.blur);
         // cv.GaussianBlur(image, image, ksize, 0, 0, cv.BORDER_DEFAULT);
 
@@ -54,19 +55,14 @@ class Store {
         image.delete();
         renderHistogram()
     }
-
-    setCurrentImageValues = (hue, value, brightness, blur) => {
-        this.store.hue = hue;
-        this.store.value = value;
-        this.store.brightness = brightness;
-        this.store.blur = blur
-    }
 }
 
 const store = new Store();
 const resetImgButton = document.getElementById('ResetImgButton');
 const imgElement = document.getElementById('imageSrc');
 const saveImgButton = document.getElementById('SaveImgButton');
+const uploadButton = document.getElementById('uploadButton');
+const fileInputElement = document.getElementById('fileInput')
 
 saveImgButton.addEventListener('click', () => {
     const dataURL = resultCanvas.toDataURL("image/jpeg");
@@ -86,15 +82,26 @@ resetImgButton.addEventListener('click', () => {
     mat.delete()
 });
 
-setTimeout(() => {
+fileInputElement.addEventListener('input', (evt) => {
+    imgElement.src = window.URL.createObjectURL(fileInputElement.files[0]);
+    setTimeout(updateImage, 100)
+});
+
+uploadButton.addEventListener('click', (evt) => {
+    fileInputElement.click();
+});
+
+const updateImage = () => {
     let mat = cv.imread(imgElement);
     cv.imshow('canvasOutput_2', mat);
     let image = cv.imread('canvasOutput_2');
     cv.imshow('canvasOutput_2_result', image);
-    // перевод в RGB пространство
-    cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
     renderHistogram();
     image.delete()
+}
+
+setTimeout(() => {
+    updateImage()
 }, 800);
 
 const BlurInputRangeEl = document.getElementById('blurInputRange');
@@ -141,7 +148,7 @@ const renderHistogram = () => {
     let ranges = [0, 255];
     let hist = new cv.Mat();
     let mask = new cv.Mat();
-    let color = new cv.Scalar(255, 255, 255);
+    let color = new cv.Scalar(224, 224, 224);
     let scale = 2;
 // You can try more different parameters
     cv.calcHist(srcVec, channels, mask, hist, histSize, ranges, accumulate);
