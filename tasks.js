@@ -31,8 +31,8 @@ class Store {
 
         // перевод в HSV пространство
         cv.cvtColor(image, image, cv.COLOR_RGB2HSV);
-        for (let i = 0; i < image.matSize[1]; i++) {
-            for (let j = 0; j < image.matSize[0]; j++) {
+        for (let i = image.matSize[1]; i--;) {
+            for (let j = image.matSize[0]; j--;) {
                 image.ucharPtr(j, i)[0] = store.hue; // 0 канал из HSV
                 image.ucharPtr(j, i)[1] = store.value; // 1 канал из HSV
             }
