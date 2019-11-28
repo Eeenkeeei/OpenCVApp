@@ -2,7 +2,6 @@ const onOpenCvReady = () => {
     document.getElementById('status').innerHTML = 'Библиотека OpenCV.js загружена';
     console.log('Библиотека OpenCV.js загружена')
 };
-
 const resultCanvas = document.getElementById('canvasOutput_2_result');
 const ctx = resultCanvas.getContext('2d');
 
@@ -12,6 +11,7 @@ class Store {
         value: 0,
         brightness: 0,
         blur: 0,
+        clarity: 0
     };
 
     saveValues(key, value) {
@@ -38,6 +38,17 @@ class Store {
         }
         // перевод в RGB пространство
         cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
+
+        // const step = this.store.clarity
+        // // FIXME: резкость, матрица свертки некорректно работает
+        // const dst = new cv.Mat();
+        // const matr = [0.01*step, -0.0375*step, 0.0375 - 0.05*step,
+        //     0.0375 - 0.05*step
+        //     ];
+        //
+        // let kernel_matrix = new cv.Mat(3, 3, cv.CV_32FC1, matr);
+        // cv.filter2D(image, dst, 32, kernel_matrix);
+        // image = dst;
 
         cv.imshow('canvasOutput_2_result', image);
         image.delete();
@@ -90,16 +101,16 @@ setTimeout(() => {
         for (let j = 0; j < image.matSize[0]; j++) {
             totalHue += image.ucharPtr(j, i)[0]; // 0 канал из HSV
             totalValue += image.ucharPtr(j, i)[1]; // 1 канал из HSV
-            totalBrightness +=image.ucharPtr(j, i)[1]
+            totalBrightness += image.ucharPtr(j, i)[1]
         }
     }
     const avgHue = totalHue / pixelsOnImage;
     const avgValue = totalValue / pixelsOnImage;
-    const avgBrightness = totalBrightness/pixelsOnImage;
+    const avgBrightness = totalBrightness / pixelsOnImage;
     HueInputRangeEl.value = avgHue;
     ValueInputRangeEl.value = avgValue;
     BrightnessInputRangeEl.value = avgBrightness;
-    store.setCurrentImageValues(avgHue,avgValue, 5, 0)
+    store.setCurrentImageValues(avgHue, avgValue, 5, 0);
     // перевод в RGB пространство
     cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
     renderHistogram();
@@ -110,6 +121,11 @@ const BlurInputRangeEl = document.getElementById('blurInputRange');
 const BrightnessInputRangeEl = document.getElementById('BrightnessInputRange');
 const HueInputRangeEl = document.getElementById('HueInputRange');
 const ValueInputRangeEl = document.getElementById('ValueInputRange');
+const ClarityInputRange = document.getElementById('ClarityInputRange');
+
+ClarityInputRange.addEventListener('input', (evt) => {
+    store.saveValues('clarity', evt.target.value)
+})
 
 HueInputRangeEl.addEventListener('input', (evt) => {
     store.saveValues('hue', evt.target.value)

@@ -9,11 +9,14 @@
 <h3 id="status">Библиотека загружается</h3>
 <img id="imageSrc" alt="No Image" style="display: none" src="1.jpg"/>
 <input type="file" id="fileInput" name="file"/>
+<h3>Гистограмма яркости</h3>
+<canvas id="histogram" class="histogram"></canvas>
 <canvas id="canvasOutput_2" style="display: none" class="canvas"></canvas>
 <canvas id="canvasOutput_2_result"></canvas>
 
 <button id="ResetImgButton">Reset img</button>
 <button id="SaveImgButton">Save img</button>
+
 
 
 
@@ -32,7 +35,13 @@
 <p>
     <label>
         Яркость
-        <input type="range" value="1" min="1" max="255" step="1" id="BrightnessInputRange"/>
+        <input type="range" value="1" min="-255" max="255" step="1" id="BrightnessInputRange"/>
+    </label>
+</p>
+<p>
+    <label>
+        Резкость
+        <input type="range" value="0" min="0" max="10" step="0.01" id="ClarityInputRange"/>
     </label>
 </p>
 <p>
@@ -44,8 +53,6 @@
 
 
 
-<h3>Гистограмма яркости</h3>
-<canvas id="histogram" class="histogram"></canvas>
 
 <script async src="opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
 <script src="tasks.js"></script>
