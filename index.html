@@ -25,29 +25,33 @@
         Цветовой тон
         <input type="range" value="0" min="0" max="360" step="1" id="HueInputRange"/>
     </label>
+    <span id="HueSpanText"></span>
+
 </p>
 <p>
     <label>
         Насыщенность
         <input type="range" value="0" min="0" max="100" step="1" id="ValueInputRange"/>
     </label>
+    <span id="ValueSpanText"></span>
 </p>
 <p>
     <label>
         Яркость
-        <input type="range" value="1" min="-255" max="255" step="1" id="BrightnessInputRange"/>
+        <input type="range" value="1" min="-100" max="100" step="1" id="BrightnessInputRange"/>
     </label>
+    <span id="BrightnessSpanText"></span>
 </p>
 <p>
     <label>
         Резкость
-        <input type="range" value="0" min="0" max="10" step="0.01" id="ClarityInputRange"/>
+        <input type="range" value="0" min="0" max="10" disabled step="0.01" id="ClarityInputRange"/>
     </label>
 </p>
 <p>
     <label>
         Размытие
-        <input type="range" value="0" max="100" step="0.1" id="blurInputRange"/>
+        <input type="range" value="0" max="100" step="0.1" disabled id="blurInputRange"/>
     </label>
 </p>
 

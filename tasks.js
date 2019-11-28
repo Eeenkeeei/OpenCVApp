@@ -103,20 +103,27 @@ const HueInputRangeEl = document.getElementById('HueInputRange');
 const ValueInputRangeEl = document.getElementById('ValueInputRange');
 const ClarityInputRange = document.getElementById('ClarityInputRange');
 
+const HueSpanText = document.getElementById('HueSpanText');
+const ValueSpanText = document.getElementById('ValueSpanText');
+const BrightnessSpanText = document.getElementById('BrightnessSpanText');
+
 ClarityInputRange.addEventListener('input', (evt) => {
     store.saveValues('clarity', evt.target.value)
-})
+});
 
 HueInputRangeEl.addEventListener('input', (evt) => {
     store.saveValues('hue', evt.target.value)
+    HueSpanText.textContent = "Значение: " + evt.target.value
 });
 
 ValueInputRangeEl.addEventListener('input', (evt) => {
     store.saveValues('value', evt.target.value);
+    ValueSpanText.textContent = "Значение: " + evt.target.value
 });
 
 BrightnessInputRangeEl.addEventListener('input', (evt) => {
     store.saveValues('brightness', evt.target.value)
+    BrightnessSpanText.textContent = "Значение: " + evt.target.value
 });
 
 BlurInputRangeEl.addEventListener('input', (evt) => {
