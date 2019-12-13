@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <title>№1, Ильичев, 4308</title>
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
 
@@ -14,15 +15,18 @@
         <div class="col">
             <h3 id="status">Библиотека загружается</h3>
             <img id="imageSrc" alt="No Image" style="display: none" src="1.jpg"/>
-                <input type="file" id="fileInput" name="file" style="display: none">
+            <input type="file" id="fileInput" name="file" style="display: none">
             <div class="uploadArea">
                 <button type="button" class="btn btn-info" id="uploadButton">Загрузить изображение</button>
             </div>
 
             <canvas id="canvasOutput_2" style="display: none" class="canvas"></canvas>
             <canvas id="canvasOutput_2_result" class="resultImage"></canvas>
-            <button type="button" id="ResetImgButton" class="btn btn-dark">Сбросить изображение</button>
-            <button type="button" id="SaveImgButton" class="btn btn-dark">Сохранить изображение</button>
+            <div style="display: flex">
+                <button type="button" id="ResetImgButton" class="btn btn-dark">Сбросить изображение</button>
+                <button type="button" id="SaveImgButton" class="btn btn-dark" style="margin-left: 1rem">Сохранить изображение</button>
+            </div>
+
         </div>
         <div class="col">
             <p>
@@ -47,13 +51,13 @@
                 </label>
                 <span id="BrightnessSpanText"></span>
             </p>
-            <p>
+            <p style="display: none">
                 <label>
                     Резкость
                     <input type="range" value="0" min="0" max="10" disabled step="0.01" id="ClarityInputRange"/>
                 </label>
             </p>
-            <p>
+            <p style="display: none">
                 <label>
                     Размытие
                     <input type="range" value="0" max="100" step="0.1" disabled id="blurInputRange"/>

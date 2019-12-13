@@ -4,6 +4,7 @@ const onOpenCvReady = () => {
 };
 const resultCanvas = document.getElementById('canvasOutput_2_result');
 const ctx = resultCanvas.getContext('2d');
+let startImage;
 
 class Store {
     store = {
@@ -26,7 +27,7 @@ class Store {
 
         // блюр до преобразования
         //FIXME БЛЮР СТРАННО РАБОТАЕТ
-        let ksize = new cv.Size(store.blur, store.blur);
+        // let ksize = new cv.Size(store.blur, store.blur);
         // cv.GaussianBlur(image, image, ksize, 0, 0, cv.BORDER_DEFAULT);
 
         // перевод в HSV пространство
@@ -62,7 +63,7 @@ const resetImgButton = document.getElementById('ResetImgButton');
 const imgElement = document.getElementById('imageSrc');
 const saveImgButton = document.getElementById('SaveImgButton');
 const uploadButton = document.getElementById('uploadButton');
-const fileInputElement = document.getElementById('fileInput')
+const fileInputElement = document.getElementById('fileInput');
 
 saveImgButton.addEventListener('click', () => {
     const dataURL = resultCanvas.toDataURL("image/jpeg");
@@ -77,7 +78,7 @@ saveImgButton.addEventListener('click', () => {
 
 resetImgButton.addEventListener('click', () => {
     let mat = cv.imread('canvasOutput_2');
-    cv.imshow('canvasOutput_2_result', mat);
+    cv.imshow('canvasOutput_2_result', startImage);
     renderHistogram();
     mat.delete()
 });
@@ -91,14 +92,63 @@ uploadButton.addEventListener('click', (evt) => {
     fileInputElement.click();
 });
 
+
+
 const updateImage = () => {
     let mat = cv.imread(imgElement);
+    startImage = mat;
     cv.imshow('canvasOutput_2', mat);
     let image = cv.imread('canvasOutput_2');
     cv.imshow('canvasOutput_2_result', image);
+    const height = mat.rows;
+    const width = mat.cols;
+    console.log(image.matSize[0]);
+    console.log(image.matSize[1]);
+
+    const heightBlocks = height / 100 > Math.floor(height/100) ? Math.floor(height/100) + 1 : height / 100;
+    const widthBlocks = width / 100 > Math.floor(width/100) ? Math.floor(width/100) + 1 : width / 100;
+
+    const heightBlocksArr = [];
+    const widthBlocksArr = [];
+
+    let heightCounter = 1;
+    let widthCounter = 1;
+
+    while (heightCounter <= heightBlocks) {
+        heightBlocksArr.push(heightCounter-1); // делаем -1 потому что считаем с нулевых пикселей, а значит с нулевого счетчика
+        heightCounter++
+    }
+
+    while (widthCounter <= widthBlocks) {
+        widthBlocksArr.push(widthCounter-1);
+        widthCounter++
+    }
+
+    console.log(heightBlocksArr);
+    console.log(widthBlocksArr);
+
+    heightBlocksArr.forEach(i => {
+        widthBlocksArr.forEach(j => {
+            calculating(i, j, image)
+        })
+    });
+
+    console.log('Количество блоков: ',heightBlocksArr.length * widthBlocksArr.length);
+
     renderHistogram();
     image.delete()
-}
+};
+
+const calculating = (startHeightCounter, startWidthCounter, image) => {
+    for (let i = startWidthCounter*100; i < startWidthCounter*100 + 100; i++) {
+        for (let j = startHeightCounter*100; j < startHeightCounter*100 + 100; j++) {
+            // image.ucharPtr(j, i)[0] = store.hue; // 0 канал из HSV
+            // image.ucharPtr(j, i)[1] = store.value; // 1 канал из HSV
+        }
+    }
+
+    console.log('startWidth: ', startWidthCounter*100, ' end: ', startWidthCounter*100 + 100, ' startHeight: ',startHeightCounter*100, 'heightEnd: ', startHeightCounter*100 + 100)
+};
 
 setTimeout(() => {
     updateImage()
@@ -136,6 +186,53 @@ BrightnessInputRangeEl.addEventListener('input', (evt) => {
 BlurInputRangeEl.addEventListener('input', (evt) => {
     store.saveValues('blur', evt.target.value)
 });
+
+resultCanvas.addEventListener('mousedown', (evt) => {
+    let mouseDownPoint;
+    let mouseUpPoint;
+    // сброс картинки на исходную
+    let mat = cv.imread(imgElement);
+    cv.imshow('canvasOutput_2', mat)
+    mouseDownPoint = new cv.Point(evt.offsetX, evt.offsetY);
+    resultCanvas.addEventListener('mouseup', (evt) => {
+        mouseUpPoint = new cv.Point(evt.offsetX, evt.offsetY);
+        drawRectangle(mouseDownPoint, mouseUpPoint);
+        mouseUpPoint = null;
+        mouseDownPoint = null;
+    });
+    mat.delete()
+});
+
+
+const drawRectangle = (mouseDownPoint, mouseUpPoint) => {
+    let startImage = cv.imread(imgElement);
+    let image = cv.imread(resultCanvas);
+    cv.rectangle(image, mouseDownPoint, mouseUpPoint, new cv.Scalar(255, 255, 255, 255), 2);
+    let height = mouseUpPoint.y - mouseDownPoint.y;
+    let width = mouseUpPoint.x - mouseDownPoint.x;
+    let result = new cv.Mat(height, width, cv.CV_8UC3);
+
+    for (let i = 0; i < image.matSize[1]; i++) {
+        for (let j = 0; j < image.matSize[0]; j++) {
+            if (i >= mouseDownPoint.x && i <= mouseUpPoint.x) {
+                if (j >= mouseDownPoint.y && j <= mouseUpPoint.y) {
+                    let R = startImage.ucharPtr(j, i)[0];
+                    let G = startImage.ucharPtr(j, i)[1];
+                    let B = startImage.ucharPtr(j, i)[2];
+                    result.ucharPtr(j - mouseDownPoint.y, i - mouseDownPoint.x)[0] = R;
+                    result.ucharPtr(j - mouseDownPoint.y, i - mouseDownPoint.x)[1] = G;
+                    result.ucharPtr(j - mouseDownPoint.y, i - mouseDownPoint.x)[2] = B;
+                }
+            }
+        }
+    }
+
+    cv.imshow('canvasOutput_2', result);
+    cv.imshow('canvasOutput_2_result', result);
+    image.delete();
+    result.delete();
+    startImage.delete()
+};
 
 const renderHistogram = () => {
     let src = cv.imread('canvasOutput_2_result');
