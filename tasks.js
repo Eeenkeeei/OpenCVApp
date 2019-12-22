@@ -2,7 +2,21 @@ const onOpenCvReady = () => {
     document.getElementById('status').innerHTML = 'Библиотека OpenCV.js загружена';
     console.log('Библиотека OpenCV.js загружена')
 };
+
+const BlurInputRangeEl = document.getElementById('blurInputRange');
+const BrightnessInputRangeEl = document.getElementById('BrightnessInputRange');
+const HueInputRangeEl = document.getElementById('HueInputRange');
+const ValueInputRangeEl = document.getElementById('ValueInputRange');
+const ClarityInputRange = document.getElementById('ClarityInputRange');
+const HueSpanText = document.getElementById('HueSpanText');
+const ValueSpanText = document.getElementById('ValueSpanText');
+const BrightnessSpanText = document.getElementById('BrightnessSpanText');
 const resultCanvas = document.getElementById('canvasOutput_2_result');
+const resetImgButton = document.getElementById('ResetImgButton');
+const imgElement = document.getElementById('imageSrc');
+const saveImgButton = document.getElementById('SaveImgButton');
+const uploadButton = document.getElementById('uploadButton');
+const fileInputElement = document.getElementById('fileInput');
 const ctx = resultCanvas.getContext('2d');
 let startImage;
 
@@ -25,11 +39,6 @@ class Store {
         // Смена яркости
         image.convertTo(image, -1, 1, store.brightness);
 
-        // блюр до преобразования
-        //FIXME БЛЮР СТРАННО РАБОТАЕТ
-        // let ksize = new cv.Size(store.blur, store.blur);
-        // cv.GaussianBlur(image, image, ksize, 0, 0, cv.BORDER_DEFAULT);
-
         // перевод в HSV пространство
         cv.cvtColor(image, image, cv.COLOR_RGB2HSV);
         for (let i = image.matSize[1]; i--;) {
@@ -41,17 +50,6 @@ class Store {
         // перевод в RGB пространство
         cv.cvtColor(image, image, cv.COLOR_HSV2RGB);
 
-        // const step = this.store.clarity
-        // // FIXME: резкость, матрица свертки некорректно работает
-        // const dst = new cv.Mat();
-        // const matr = [0.01*step, -0.0375*step, 0.0375 - 0.05*step,
-        //     0.0375 - 0.05*step
-        //     ];
-        //
-        // let kernel_matrix = new cv.Mat(3, 3, cv.CV_32FC1, matr);
-        // cv.filter2D(image, dst, 32, kernel_matrix);
-        // image = dst;
-
         cv.imshow('canvasOutput_2_result', image);
         image.delete();
         renderHistogram()
@@ -59,11 +57,6 @@ class Store {
 }
 
 const store = new Store();
-const resetImgButton = document.getElementById('ResetImgButton');
-const imgElement = document.getElementById('imageSrc');
-const saveImgButton = document.getElementById('SaveImgButton');
-const uploadButton = document.getElementById('uploadButton');
-const fileInputElement = document.getElementById('fileInput');
 
 saveImgButton.addEventListener('click', () => {
     const dataURL = resultCanvas.toDataURL("image/jpeg");
@@ -154,22 +147,12 @@ setTimeout(() => {
     updateImage()
 }, 800);
 
-const BlurInputRangeEl = document.getElementById('blurInputRange');
-const BrightnessInputRangeEl = document.getElementById('BrightnessInputRange');
-const HueInputRangeEl = document.getElementById('HueInputRange');
-const ValueInputRangeEl = document.getElementById('ValueInputRange');
-const ClarityInputRange = document.getElementById('ClarityInputRange');
-
-const HueSpanText = document.getElementById('HueSpanText');
-const ValueSpanText = document.getElementById('ValueSpanText');
-const BrightnessSpanText = document.getElementById('BrightnessSpanText');
-
 ClarityInputRange.addEventListener('input', (evt) => {
     store.saveValues('clarity', evt.target.value)
 });
 
 HueInputRangeEl.addEventListener('input', (evt) => {
-    store.saveValues('hue', evt.target.value)
+    store.saveValues('hue', evt.target.value);
     HueSpanText.textContent = "Значение: " + evt.target.value
 });
 
@@ -179,7 +162,7 @@ ValueInputRangeEl.addEventListener('input', (evt) => {
 });
 
 BrightnessInputRangeEl.addEventListener('input', (evt) => {
-    store.saveValues('brightness', evt.target.value)
+    store.saveValues('brightness', evt.target.value);
     BrightnessSpanText.textContent = "Значение: " + evt.target.value
 });
 
@@ -192,7 +175,7 @@ resultCanvas.addEventListener('mousedown', (evt) => {
     let mouseUpPoint;
     // сброс картинки на исходную
     let mat = cv.imread(imgElement);
-    cv.imshow('canvasOutput_2', mat)
+    cv.imshow('canvasOutput_2', mat);
     mouseDownPoint = new cv.Point(evt.offsetX, evt.offsetY);
     resultCanvas.addEventListener('mouseup', (evt) => {
         mouseUpPoint = new cv.Point(evt.offsetX, evt.offsetY);
